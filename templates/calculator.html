@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Python Web Calculator</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#1f1f2e; color:#fff; display:flex; align-items:center; justify-content:center; height:100vh; margin:0;}
+    .calc { background:#25293f; border-radius:16px; width:320px; padding:20px; box-shadow:0 8px 24px rgba(0,0,0,.35);}
+    h1 { text-align:center; margin-bottom:16px; font-size:22px; }
+    .screen { width:100%; background:#1a1d31; border:none; border-radius:10px; color:#fff; font-size:24px; text-align:right; padding:12px; box-sizing:border-box; margin-bottom:10px; }
+    .result { color:#4ce1ff; font-size:18px; margin-bottom:12px; min-height:22px; text-align:right; }
+    .grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+    button { font-size:18px; padding:14px; border:none; border-radius:8px; background:#323753; color:#e8e8ff; cursor:pointer; transition:transform .08s ease; }
+    button:hover { transform: scale(1.04); }
+    .operator { background:#f39c12; color:#1f1f2e; }
+    .wide { grid-column: span 2; }
+    footer { margin-top:10px; text-align:center; font-size:12px; color:#aaa; }
+  </style>
+</head>
+<body>
+<div class="calc">
+  <h1>Python Web Calculator</h1>
+  <form method="post">
+    <input class="screen" name="expression" value="{{ expression }}" placeholder="0" autocomplete="off" />
+    <div class="result">{{ result }}</div>
+    <div class="grid">
+      {% for v in ['7','8','9','÷','4','5','6','×','1','2','3','-','0','.','=','+'] %}
+        {% if v == '=' %}
+          <button class="wide operator" type="submit">=</button>
+        {% elif v == '÷' or v == '×' or v == '-' or v == '+' %}
+          <button class="operator" type="button" onclick="press('{{v}}')">{{v}}</button>
+        {% else %}
+          <button type="button" onclick="press('{{v}}')">{{v}}</button>
+        {% endif %}
+      {% endfor %}
+      <button type="button" onclick="clearInput()" style="grid-column: span 4; background:#e74c3c;">C</button>
+    </div>
+  </form>
+</div>
+
+<script>
+function press(ch) {
+  let inp = document.querySelector('[name="expression"]');
+  if (ch === '=') { document.forms[0].submit(); return; }
+  inp.value = inp.value + ch;
+}
+function clearInput() {
+  document.querySelector('[name="expression"]').value = '';
+  document.querySelector('.result').textContent = '';
+}
+</script>
+<footer>Supports +, -, ×, ÷, ., parentheses</footer>
+</body>
+</html>
